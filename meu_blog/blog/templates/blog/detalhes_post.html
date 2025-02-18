@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.titulo }} - Detalhes{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">{{ post.titulo }}</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% if post.imagem %}
+            <img src="{{ post.imagem.url }}" class="img-fluid mb-4 rounded" alt="{{ post.titulo }}">
+            {% endif %}
+            <p class="lead">{{ post.conteudo }}</p>
+            <p class="text-muted small">Publicado em {{ post.data_publicacao }}</p>
+            <a href="{% url 'lista_posts' %}" class="btn btn-primary mb-4">Voltar</a>
+
+            <hr>
+
+            <h3>Comentários</h3>
+            {% for comentario in comentarios %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ comentario.nome }}</h5>
+                    <p class="card-text">{{ comentario.conteudo }}</p>
+                    <p class="text-muted small">Comentado em {{ comentario.data_criacao }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p>Nenhum comentário disponível.</p>
+            {% endfor %}
+
+            <hr>
+
+            <h3>Deixe um Comentário</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_nome" class="form-label">Nome</label>
+                    {{ form.nome }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_conteudo" class="form-label">Comentário</label>
+                    {{ form.conteudo }}
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

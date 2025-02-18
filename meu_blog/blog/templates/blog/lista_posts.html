@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Posts{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-4">Para os amantes da linguagem e tecnologia</h1>
+<div class="row">
+    {% for post in page_obj %}
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="position-relative">
+                {% if post.imagem %}
+                <img src="{{ post.imagem.url }}" class="card-img-top rounded-top-4" alt="{{ post.titulo }}">
+                {% endif %}
+                <div class="profile-img-container">
+                    {% if post.autor.foto %}
+                    <img src="{{ post.autor.foto.url }}" class="profile-img rounded-circle" alt="{{ post.autor }}">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body text-center">
+                <h5 class="card-title fw-bold">{{ post.titulo }}</h5>
+                <p class="card-text text-muted">{{ post.conteudo|truncatewords:20 }}</p>
+                <a href="{% url 'detalhes_post' post.pk %}" class="btn btn-primary">Ver Detalhes</a>
+            </div>
+            <div class="card-footer text-center">
+                <a href="#" class="me-3 text-muted"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="me-3 text-muted"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-muted"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12 text-center">
+        <p>Nenhum post disponível.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Paginação -->
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+            {% endif %}
+
+            <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}
